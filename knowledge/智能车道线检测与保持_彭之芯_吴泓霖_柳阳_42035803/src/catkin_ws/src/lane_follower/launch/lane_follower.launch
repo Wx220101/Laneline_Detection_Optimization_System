@@ -1,0 +1,28 @@
+<launch>
+    <!-- USB摄像头节点 -->
+    <node name="camera_node" pkg="lane_follower" type="camera_node.py" output="screen" launch-prefix="taskset -c 2,3">
+        <param name="camera_device" value="/dev/video0" />
+        <param name="frame_width" value="640" />
+        <param name="frame_height" value="480" />
+        <param name="fps" value="5" />
+    </node>
+    
+    <!-- 车道检测节点 -->
+    <node name="lane_detector" pkg="lane_follower" type="lane_detector.py" output="screen" launch-prefix="taskset -c 2,3">
+        <param name="roi_height" value="0.6" />
+        <param name="roi_width" value="0.8" />
+    </node>
+    
+    <!-- PID控制节点 -->
+    <node name="pid_controller" pkg="lane_follower" type="pid_controller.py" output="screen" launch-prefix="taskset -c 0,1">
+        <param name="Kp" value="0.5" />
+        <param name="Ki" value="0.01" />
+        <param name="Kd" value="0.1" />
+    </node>
+    
+    <!-- 串口桥接节点 (使用ttyACM0) -->
+    <node name="serial_bridge" pkg="lane_follower" type="serial_bridge.py" output="screen" launch-prefix="taskset -c 0,1">
+        <param name="port" value="/dev/ttyACM0" />
+        <param name="baudrate" value="115200" />
+    </node>
+</launch>
