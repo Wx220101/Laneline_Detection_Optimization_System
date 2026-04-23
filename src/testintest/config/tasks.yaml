@@ -1,36 +1,44 @@
 analysis_task:
   description: >
-    Analyze the provided lane detection system information: {system_info}
-    Identify specific problems, limitations, performance bottlenecks, edge cases,
-    and areas where the system fails or produces inaccurate results.
-    Consider factors like: detection accuracy, processing speed, robustness to
-    lighting conditions, handling of curves, occlusions, and real-world scenarios.
+    分析提供的车道检测系统信息：{system_info}
+    聚焦在两个具体方向：算法优化和数据处理改进。
+    识别特定问题、局限性、性能瓶颈、边缘情况，以及系统失败或产生不准确结果的领域。
+    考虑因素如：检测准确性、处理速度、对光照条件的鲁棒性、曲线处理、遮挡和真实世界场景。
   expected_output: >
-    A comprehensive analysis document containing:
-    - Current system architecture and capabilities
-    - Identified problems and failure modes
-    - Performance bottlenecks
-    - Critical edge cases and limitations
-    - Impact assessment of each issue
-    Formatted as markdown without '```'
+    一份聚焦的分析文档，明确指出两个最重要的优化方向：
+    1. **算法优化方向**：具体问题描述和改进重点
+    2. **数据处理改进方向**：具体问题描述和改进重点
+
+    为每个方向提供：
+    - 当前存在的主要问题
+    - 问题对系统性能的影响程度
+    - 需要修改的关键代码文件
+    - 预期改进效果
+
+    所有输出必须用中文书写，以markdown格式输出，不使用'```'
   agent: lane_detection_analyst
 
 improvement_task:
   description: >
-    Based on the analysis from the lane detection analyst, propose concrete
-    improvement solutions for the lane detection system.
-    Design practical, implementable enhancements that address the identified issues.
-    Consider: algorithm improvements, optimization techniques, hardware acceleration,
-    data augmentation, model enhancements, and testing strategies.
+    基于车道检测分析师的分析，提出具体的改进解决方案。
+    必须严格聚焦在最多两个最重要的优化方向上。
+    每个方向都要提供详细的实施步骤，包括具体到哪行代码如何修改。
+    优先选择影响最大的改进方向：算法优化和数据处理改进。
   expected_output: >
-    A detailed improvement proposal containing:
-    - Prioritized list of improvements (with implementation difficulty and impact)
-    - Specific algorithm or architecture enhancements
-    - Code optimization recommendations
-    - Testing and validation strategy
-    - Expected performance gains
-    - Implementation timeline and resource requirements
-    Each suggestion should be actionable and include technical details.
-    Formatted as markdown without '```'
+    一份高度聚焦的改进提案，只包含最多两个优化方向：
+    1. **第一个优化方向**：
+       - 具体问题描述
+       - 详细的实施步骤（1-5步）
+       - 每个步骤的具体代码修改（包括文件路径、行号、原代码、新代码）
+       - 预期效果和验证方法
+
+    2. **第二个优化方向**：
+       - 具体问题描述
+       - 详细的实施步骤（1-5步）
+       - 每个步骤的具体代码修改（包括文件路径、行号、原代码、新代码）
+       - 预期效果和验证方法
+
+    所有输出必须用中文书写，代码修改要精确到具体行号和内容。
+    以markdown格式输出，不使用'```'
   agent: improvement_engineer
   output_file: 'lane_detection_improvements.md'
