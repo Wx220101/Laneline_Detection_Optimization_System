@@ -1,0 +1,25 @@
+[project]
+name = "lane_recognition"
+version = "0.1.0"
+description = "lane_recognition using crewAI"
+authors = [{ name = "Your Name", email = "you@example.com" }]
+requires-python = ">=3.10,<3.14"
+dependencies = [
+    "crewai[litellm,tools]==1.14.2",
+    "gradio>=5",
+    "pdfplumber>=0.11",
+]
+
+[project.scripts]
+kickoff = "lane_recognition.main:kickoff"
+run_crew = "lane_recognition.main:kickoff"
+plot = "lane_recognition.main:plot"
+run_with_trigger = "lane_recognition.main:run_with_trigger"
+lane-ui = "lane_recognition.ui:launch"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.crewai]
+type = "flow"

@@ -1,0 +1,52 @@
+<launch>
+    <!-- 输入源：默认支持视频回放（video_path非空时启用），否则走摄像头 -->
+    <arg name="video_path" default="" />
+    <arg name="loop" default="true" />
+    <arg name="show" default="false" />
+    <arg name="camera_device" default="/dev/video0" />
+    <arg name="frame_width" default="640" />
+    <arg name="frame_height" default="480" />
+    <arg name="fps" default="5" />
+    <!-- lane_detector输出参数（可选：写出调试视频） -->
+    <arg name="output_video" default="" />
+    <arg name="output_fps" default="10" />
+
+    <node name="camera_node" pkg="lane_follower" type="camera_node.py" output="screen">
+        <param name="video_path" value="$(arg video_path)" />
+        <param name="loop" value="$(arg loop)" />
+        <param name="show" value="$(arg show)" />
+        <param name="camera_device" value="$(arg camera_device)" />
+        <param name="frame_width" value="$(arg frame_width)" />
+        <param name="frame_height" value="$(arg frame_height)" />
+        <param name="fps" value="$(arg fps)" />
+    </node>
+    
+    <!-- 车道检测节点 -->
+    <node name="lane_detector" pkg="lane_follower" type="lane_detector.py" output="screen">
+        <param name="roi_height" value="0.6" />
+        <param name="roi_width" value="0.8" />
+        <!-- Docker/无GUI环境默认不弹窗 -->
+        <param name="show" value="false" />
+        <param name="output_video" value="$(arg output_video)" />
+        <param name="output_fps" value="$(arg output_fps)" />
+    </node>
+    
+    <!-- PID控制节点 -->
+    <node name="pid_controller" pkg="lane_follower" type="pid_controller.py" output="screen">
+        <param name="Kp" value="0.5" />
+        <param name="Ki" value="0.01" />
+        <param name="Kd" value="0.1" />
+    </node>
+    
+    <!-- 串口桥接节点：Docker/视频回放场景默认关闭，需要实体车时再开启 -->
+    <arg name="enable_serial" default="false" />
+    <arg name="serial_port" default="/dev/ttyACM0" />
+    <arg name="serial_baudrate" default="115200" />
+
+    <group if="$(arg enable_serial)">
+        <node name="serial_bridge" pkg="lane_follower" type="serial_bridge.py" output="screen">
+            <param name="port" value="$(arg serial_port)" />
+            <param name="baudrate" value="$(arg serial_baudrate)" />
+        </node>
+    </group>
+</launch>
